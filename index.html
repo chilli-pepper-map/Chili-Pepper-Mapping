@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
     <style>
 html, body {
     height: 100%;
@@ -54,14 +55,15 @@ footer {
     width: 100%;
 }
 </style>
-     <!-- Bootstrap CSS -->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
 </head>
+
 <body>
     <!-- Header-->
      <header>
         Mapping Chili Peppers Across the World <!-- This can change-->
      </header>
+
     <!-- Popup Modal -->
 <div class="modal fade" id="overlay">
     <div class="modal-dialog">
@@ -138,6 +140,7 @@ footer {
                 }
             }
         ];
+
          // Create markers for each chili pepper
          var markers = [];
         dataset1.forEach(function(pepper) {
@@ -159,6 +162,7 @@ footer {
                 }
             });
         }
+
          // Initialize the slider and update the map when the slider value changes
          var yearSlider = document.getElementById("yearSlider");
         var selectedYear = document.getElementById("selectedYear");
@@ -170,7 +174,7 @@ footer {
            filterMarkersByYear(year);
         }); 
 
-         // Initial filter based on default slider value (1870)
+         // Initial filter based on default slider value (what start year?)
          filterMarkersByYear(parseInt(yearSlider.value));
        
         // Function to handle each feature in the GeoJSON
