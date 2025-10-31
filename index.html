@@ -72,7 +72,7 @@ footer {
           <h4 class="modal-title">Title Here</h4>
         </div>
         <div class="modal-body">
-          <p>Info Here. 
+          <p> What our project is about.... 
 </p>
 <div class="modal-footer">     
     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -94,7 +94,7 @@ footer {
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
         // Initialize the map and set its view to the chosen geographical coordinates and zoom level
-        var map = L.map('map').setView([20,0], 2); // Coordinates set to geographic center of the world
+        var map = L.map('map').setView([20,0], 2); // Coordinates set to geographic center of the world start in latin america
 
         // Add OpenStreetMap tiles- aesthetic 
        L.tileLayer (
@@ -148,6 +148,7 @@ footer {
             marker.bindPopup('<b>' + pepper.properties.title + '</b><br>' + pepper.properties.description + '<br><img src="' + pepper.properties.image + '" width="200px">');
             markers.push({marker: marker, time: new Date(pepper.properties.time).getFullYear()});
         });
+
         // Add markers to the map
         var markersLayer = L.layerGroup().addTo(map);
 
@@ -184,7 +185,7 @@ footer {
                 var content = `
                     <div style='clear: both'></div>
                     <div style='float: left; padding: 5px; margin-right: 10px'>
-                        <img style='width: 200px;' src='${feature.properties.image}' alt='Ship Image' />
+                        <img style='width: 200px;' src='${feature.properties.image}' alt='Pepper Image' />
                     </div>
                     <div>
                         <h4>${feature.properties.title}</h4>
@@ -215,6 +216,7 @@ footer {
             onEachFeature: onEachFeature
         }).addTo(map);
     </script>
+    
       <!-- Bootstrap JS dependencies -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
