@@ -73,7 +73,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title">Mapping Chili Peppers: Globally</h4>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <p>Explore the world of chili peppers.</p>
@@ -85,13 +85,18 @@
     </div>
   </div>
 
+  <script>
+    const overlayModal=new bootstrap.Modal(document.getElementById('overlay'));
+    overlayModal.show();
+  </script>
+
   <!-- Map -->
   <div id="map"></div>
 
   <!-- Timeline Slider -->
   <div class="timeline-container">
-    <label for="yearSlider">Select Year: <span id="selectedYear">1868</span></label>
-    <input type="range" id="yearSlider" min="1868" max="1975" value="1868" step="1">
+    <label for="yearSlider">Select Year: <span id="selectedYear">1492</span></label>
+    <input type="range" id="yearSlider" min="1492" max="1900" value="1492" step="1">
   </div>
 
   <!-- Leaflet + Bootstrap JS -->
@@ -99,19 +104,21 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
+    
+
     // Initialize map centered on Brazil
     var map = L.map('map').setView([-14.2350, -51.9253], 3);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 16,
-      attribution: '© OpenStreetMap contributors'
+    // Light muted map style (CartoDB Positron)
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
     }).addTo(map);
 
-    // Optional overlay tint
+    // overlay for map tint to add a soft warmth
     L.rectangle([[-90, -180], [90, 180]], {
       color: "#FF4500",
       weight: 0,
-      fillOpacity: 0.05
+      fillOpacity: 0.03
     }).addTo(map);
 
     // Show modal + play audio when map loads
@@ -129,18 +136,17 @@
     //  Dataset (copy for each point)
     const dataset1 = [{
       type: 'Feature',
-      geometry: { type: 'Point', coordinates: [-84.95258, 46.76947] },
+      geometry: { type: 'Point', coordinates: [-2.0791, 42.4247] }, //longitude, latitude
       properties: {
-        title: 'Example Pepper', //Title
-        description: 'Origin point of a chili pepper variety.', //add description
-        time: '1872-11-27', //update date
-        image: //if we include an image,
+        title: 'Lodosa, Spain', //Title
+        description: 'Chilies were in regular use as a culinary ingredient.', //add description
+        time: '1513', //update date
         icon: {
-          iconUrl: //flaticon image here,
+          iconUrl: 'images/food.png', //flaticon image here,
           iconSize: [40, 40],
           iconAnchor: [20, 40],
           popupAnchor: [0, -40]
-        }
+        },
       }
     }];
 
