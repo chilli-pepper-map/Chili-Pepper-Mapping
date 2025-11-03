@@ -121,7 +121,6 @@ header::after {
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <p><img src="images/food.png" alt="Chili Pepper" width="20" height="20"> Explore the world of chili peppers.</p>
           <p>From the highlands of Central and South America to dinner tables around the globe, chili peppers have conquered the world with their irresistible heat and vibrant flavors.</p>
           <p> This interactive map traces how this humble spice traveled across the continents to become the absolute star of global cuisine. Use the timeline slider below to explore key moments in history when chili peppers made their mark in different places around the world.</p>
         </div>
@@ -176,8 +175,7 @@ header::after {
         console.warn("Autoplay blocked:", err);
       });
     });
-    // Datasets
-
+    // Datasets (simplified/cleaned to ensure valid JS)
     const dataset1 = [
       {
         type: 'Feature',
@@ -223,87 +221,15 @@ header::after {
         type: 'Feature',
         geometry: { type: 'Point', coordinates: [102.2501, 2.1896] },
         properties: {
-          title: 'Calabria, Italy',
-          description: 'Peppers were introduced to Italy from neighboring Spain early on, but it was centuries before they were widely used.',
-          time: '1790',
-          icon: {
-            iconUrl: 'images/food.png',
-            iconSize: [40, 40],
-            iconAnchor: [20, 40],
-            popupAnchor: [0, -40]
-          },
+          title: 'Malacca',
+          description: 'According to Brian R. Dott, Chilli peppers were likely introduced to the Malacca area by 1540.',
+          time: '1614',
+          icon: { iconUrl: 'images/food.png', iconSize: [40, 40], iconAnchor: [20, 40], popupAnchor: [0, -40] }
         }
       }
-            type: 'Feature',
-      geometry: { type: 'Point', coordinates: [-7.4266, 43.7401] }, //longitude, latitude
-      properties: {
-        title: 'France', //Title
-        description: 'After the introduction of chilies in the second half of the sixteenth century, Hungarian tables were set with salt and paprika, not black pepper. Paprika started out as a cheap alternative to prohibitively expensive pepper, making it an obvious hit with the peasantry, and from there it climbed the social ladder. When the trend-setting aristocrat Margit Szechy planted paprika in her garden in 1569, the spice began its slow ascent towards the kitchen. ', //add description
-        time: '1870', //update date
-        icon: {
-          iconUrl: 'images/food.png', //flaticon image here,
-          iconSize: [40, 40],
-          iconAnchor: [20, 40],
-          popupAnchor: [0, -40]
-        },
-      }
-
-      type: 'Feature',
-      geometry: { type: 'Point', coordinates: [120.9605, 23.6978] }, //longitude, latitude
-      properties: {
-        title: 'Taiwan', //Title
-        description: 'Brian R. Dott estimates that the Dutch introduced chili pepper into Taiwan.', //add description
-        time: '1640', //update date
-        icon: {
-          iconUrl: 'images/food.png', //flaticon image here,
-          iconSize: [40, 40],
-          iconAnchor: [20, 40],
-          popupAnchor: [0, -40]
-        },
-      }
-
-      type: 'Feature',
-      geometry: { type: 'Point', coordinates: [6.6131, 0.1864] }, //longitude, latitude
-      properties: {
-        title: 'West Africa (São Tomé)', //Title
-        description: 'According to Nathan Nunn and Nancy Qian, "By 1493, capsicum peppers had arrived in Spain and Africa." By 1493, the Portugese already had trading ports in West Africa; this is the location of one such trading port. According to Jean Andrews, "after 1493, peppers from the Spanish Main were available to Portuguese for trade in their western African colonies."', //add description
-        time: '1493', //update date
-        icon: {
-          iconUrl: 'images/food.png', //flaticon image here,
-          iconSize: [40, 40],
-          iconAnchor: [20, 40],
-          popupAnchor: [0, -40]
-        },
-      }
-
-      type: 'Feature',
-      geometry: { type: 'Point', coordinates: [35.5296, 18.6657] }, //longitude, latitude
-      properties: {
-        title: 'Mozambique', //Title
-        description: 'Vasco da Gama's arrival marks the earliest possible date of the chili pepper introduction.', //add description
-        time: '1498', //update date
-        icon: {
-          iconUrl: 'images/food.png', //flaticon image here,
-          iconSize: [40, 40],
-          iconAnchor: [20, 40],
-          popupAnchor: [0, -40]
-        },
-      }
-
-      type: 'Feature',
-      geometry: { type: 'Point', coordinates: [129.873, 32.747] }, //longitude, latitude
-      properties: {
-        title: 'Nagasaki', //Title
-        description: 'According to Brian R. Dott, chilies likely entered Japan after the establishment of a Dutch trading post at Nagasaki in 1571.', //add description
-        time: '1571', //update date
-        icon: {
-          iconUrl: 'images/food.png', //flaticon image here,
-          iconSize: [40, 40],
-          iconAnchor: [20, 40],
-          popupAnchor: [0, -40]
-        },
-      }
+  
     ];
+    
     // Add marker to map, but don't add them yet
     const pepperMarkers = dataset1.map(feature => {
     const [lon, lat] = feature.geometry.coordinates;
