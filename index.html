@@ -139,7 +139,7 @@
       type: 'Feature',
       geometry: { type: 'Point', coordinates: [-2.0791, 42.4247] }, //longitude, latitude
       properties: {
-        title: 'Lodosa', //Title
+        title: 'Lodosa, Spain', //Title
         description: 'Chilies were in regular use as a culinary ingredient.', //add description
         time: '1513', //update date
         icon: {
@@ -150,66 +150,7 @@
         },
       }
     }];
-    const dataset2 = [{
-  type: 'Feature',
-  geometry: { type: 'Point', coordinates: [120.1667, 30.2500] }, //longitude, latitude
-  properties: {
-    title: 'Hangzhou', //Title
-    description: 'Chili peppers first appear in Hangzhou‘s local gazetteer in 1591, though they likely arrived earlier. This marks the earliest recorded appearance of chili peppers in central coastal China.', //add description
-    time: '1591', //update date
-    icon: {
-      iconUrl: 'images/food.png', //flaticon image here,
-      iconSize: [40, 40],
-      iconAnchor: [20, 40],
-      popupAnchor: [0, -40]
-    },
-  }
-}];
- const dataset3 = [{
-  type: 'Feature',
-  geometry: { type: 'Point', coordinates: [74.1240, 15.2993] }, // longitude, latitude (fixed: previously reversed)
-  properties: {
-    title: 'Goa', //Title
-    description: 'Following the Portuguese conquest of Goa in 1510, chili peppers quickly took root here. The earliest records from 1542 confirm that chili cultivation was already well-established. Historian Brian R. Dott suggests the peppers were likely introduced sometime in the early 1500s, shortly after Portuguese arrival.', //add description
-    time: '1542', //update date
-    icon: {
-      iconUrl: 'images/food.png', //flaticon image here,
-      iconSize: [40, 40],
-      iconAnchor: [20, 40],
-      popupAnchor: [0, -40]
-    },
-  }
-}];
- const dataset4 = [{
-  type: 'Feature',
-  geometry: { type: 'Point', coordinates: [123.4330, 41.8048] }, // longitude, latitude
-  properties: {
-    title: 'Fengtian', //Title
-    description: 'The earliest record of chili peppers in northeastern China comes from Fengtian (an old name for Shenyang) in 1682. Historian Brian R. Dott estimates the initial introduction likely occurred around the 1650s via Korea.', //add description
-    time: '1682', //update date
-    icon: {
-      iconUrl: 'images/food.png', //flaticon image here,
-      iconSize: [40, 40],
-      iconAnchor: [20, 40],
-      popupAnchor: [0, -40]
-    },
-  }
-}];
-const dataset5 = [{
-  type: 'Feature',
-  geometry: { type: 'Point', coordinates: [127.726, 37.658] }, // longitude, latitude
-  properties: {
-    title: 'Korea', //Title
-    description: 'The earliest known record of chili peppers on the Korean Peninsula dates to 1614, though the introduction must have occurred earlier. Historian Brian R. Dott estimates the peppers likely arrived in the 1590s during the Japanese invasions of Korea.', //add description
-    time: '1614', //update date
-    icon: {
-      iconUrl: 'images/food.png', //flaticon image here,
-      iconSize: [40, 40],
-      iconAnchor: [20, 40],
-      popupAnchor: [0, -40]
-    },
-  }
-}];
+
     // Add marker to map
     dataset1.forEach(pepper => {
       const marker = L.marker(
@@ -222,56 +163,26 @@ const dataset5 = [{
       marker.addTo(map);
     });
 
-dataset2.forEach(pepper => {
-  const marker = L.marker(
-    [pepper.geometry.coordinates[1], pepper.geometry.coordinates[0]],
-    { icon: L.icon(pepper.properties.icon) }
-  );
-  marker.bindPopup(
-    `<b>${pepper.properties.title}</b><br>${pepper.properties.description}`
-  );
-  marker.addTo(map);
-});
+    //Year slider 
+  const yearSlider = document.getElementById("yearSlider");
+  const selectedYear = document.getElementById("selectedYear");
 
-dataset3.forEach(pepper => {
-  const marker = L.marker(
-    [pepper.geometry.coordinates[1], pepper.geometry.coordinates[0]],
-    { icon: L.icon(pepper.properties.icon) }
-  );
-  marker.bindPopup(
-    `<b>${pepper.properties.title}</b><br>${pepper.properties.description}`
-  );
-  marker.addTo(map);
-});
+  yearSlider.addEventListener("input", () => {
+    const currentYear = parseInt(yearSlider.value);
+    selectedYear.textContent = currentYear;
 
-dataset4.forEach(pepper => {
-  const marker = L.marker(
-    [pepper.geometry.coordinates[1], pepper.geometry.coordinates[0]],
-    { icon: L.icon(pepper.properties.icon) }
-  );
-  marker.bindPopup(
-    `<b>${pepper.properties.title}</b><br>${pepper.properties.description}`
-  );
-  marker.addTo(map);
-});
+    // Remove all markers first
+    pepperMarkers.forEach(m => map.removeLayer(m));
 
-dataset5.forEach(pepper => {
-  const marker = L.marker(
-    [pepper.geometry.coordinates[1], pepper.geometry.coordinates[0]],
-    { icon: L.icon(pepper.properties.icon) }
-  );
-  marker.bindPopup(
-    `<b>${pepper.properties.title}</b><br>${pepper.properties.description}`
-  );
-  marker.addTo(map);
-});
-
-    // Slider update
-    const yearSlider = document.getElementById("yearSlider");
-    const selectedYear = document.getElementById("selectedYear");
-    yearSlider.addEventListener("input", () => {
-      selectedYear.textContent = yearSlider.value;
+    // Then add only those up to current year
+    pepperMarkers.forEach(m => {
+      if (m.feature.properties.time <= currentYear) {
+        m.addTo(map);
+      }
     });
+  });
+  // Show initial state (year 1492, no markers)
+  yearSlider.dispatchEvent(new Event('input'));
   </script>
 
   <footer>
