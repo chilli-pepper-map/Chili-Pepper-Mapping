@@ -102,15 +102,16 @@ header::after {
   background-size: contain;
 }
   </style>
+
+   <!-- Leaflet -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/elfalem/Leaflet.curve/leaflet.curve.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-polylinedecorator/1.7.0/leaflet.polylineDecorator.min.js"></script>
+
 </head>
 
 <body>
   <header>Mapping Chili Peppers' Journey to the World</header>
-
-  <!-- 🎵 Audio -->
-  <audio id="intro-audio" preload="auto">
-    <source src="path/to/red-hot-chili-peppers-intro.mp3" type="audio/mpeg">
-  </audio>
 
   <!-- Modal Popup -->
   <div class="modal fade" id="overlay" tabindex="-1" aria-hidden="true">
@@ -131,8 +132,6 @@ header::after {
     </div>
   </div>
 
-  <!-- Modal will be shown after map loads (see map.whenReady) -->
-
   <!-- Map -->
   <div id="map"></div>
 
@@ -142,13 +141,10 @@ header::after {
     <input type="range" id="yearSlider" min="1492" max="1900" value="1492" step="1">
   </div>
 
-  <!-- Leaflet + Bootstrap JS -->
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap JS-->
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    
-
     // Initialize map centered on Brazil
     var map = L.map('map').setView([-14.2350, -51.9253], 3);
 
@@ -157,25 +153,7 @@ header::after {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
     }).addTo(map);
 
-    // overlay for map tint to add a soft warmth
-    L.rectangle([[-90, -180], [90, 180]], {
-      color: "#FF4500",
-      weight: 0,
-      fillOpacity: 0.03
-    }).addTo(map);
-
-    // Show modal + play audio when map loads
-    map.whenReady(function () {
-      const overlayModal = new bootstrap.Modal(document.getElementById('overlay'));
-      overlayModal.show();
-
-      const audio = document.getElementById('intro-audio');
-      audio.volume = 0.5;
-      audio.play().catch(err => {
-        console.warn("Autoplay blocked:", err);
-      });
-    });
-    // Datasets (simplified/cleaned to ensure valid JS)
+    // Datasets 
     const dataset1 = [
       {
         type: 'Feature',
@@ -304,36 +282,40 @@ header::after {
       }
     ];
     
-    // Add marker to map, but don't add them yet
-    const pepperMarkers = dataset1.map(feature => {
+    // Create markers from your dataset (keep structure!)
+  const pepperMarkers = dataset1.map(feature => {
     const [lon, lat] = feature.geometry.coordinates;
     const marker = L.marker([lat, lon], { icon: L.icon(feature.properties.icon) });
     marker.bindPopup(`<b>${feature.properties.title}</b><br>${feature.properties.description}`);
-    marker.feature = feature; // store feature data inside marker
+    marker.feature = feature; // store original feature
     return marker;
   });
 
-    //Year slider 
-  const yearSlider = document.getElementById("yearSlider");
-  const selectedYear = document.getElementById("selectedYear");
+ //Timeline slider
+ const yearSlider= document.getElementById("yearSlider");
+ const selectedYear= document.getElementById("selectedYear");
 
-  yearSlider.addEventListener("input", () => {
-    const currentYear = parseInt(yearSlider.value);
-    selectedYear.textContent = currentYear;
+ yearSlider.addEventListener("input", () => {
+  const currentYear= parseInt(yearSlider.value);
+  selectedYear.textContent=currentYear;
 
-    // Remove all markers first
-    pepperMarkers.forEach(m => map.removeLayer(m));
+  //Remove all markers first 
+  pepperMarkers.forEach(m => map.removeLayer(m));
 
-    // Then add only those up to current year
-    pepperMarkers.forEach(m => {
-      if (m.feature.properties.time <= currentYear) {
-        m.addTo(map);
-      }
-    });
+  //Then add only those up to current year 
+  pepperMarkers.forEach(m => {
+    if (m.feature.properties.time <= currentYear){
+      m.addTo(map);
+    }
   });
-  // Show initial state (year 1492, no markers)
-  yearSlider.dispatchEvent(new Event('input'));
-  </script>
+ });
+
+ //Show initial state 
+ yearSlider.dispatchEvent(new Event('input'));
+
+//Add lines if time 
+
+</script>
 
   <footer>
     &copy; 2025 Chili Mapping Project | Data Sources:
