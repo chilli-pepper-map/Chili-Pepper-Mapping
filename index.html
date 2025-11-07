@@ -7,6 +7,7 @@
 
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -19,43 +20,41 @@
       display: flex;
       flex-direction: column;
     }
-  header {
+
+ header {
   text-align: center;
-  font-weight: bold;
-  padding: 10px;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #ddd;
-  position: relative;
-  overflow: hidden;
+  font-weight: 700;
+  font-size: 2.8rem;
+  letter-spacing: 1px;
+  padding: 40px 20px;
+  color: #fdfaf6;
+  background: linear-gradient(135deg, #8b2e1a, #b94527, #d66b3c);
+  background-size: 200% 200%;
+  animation: slowGlow 12s ease infinite;
+  border-bottom: 3px solid rgba(0, 0, 0, 0.1);
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
+  font-family: "Playfair Display", "Georgia", serif;
 }
-header::before {
-  content: '';
-  position: absolute;
-  left: 25%;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 120px;
-  height: 30px;
-  background: url('images/food.png') repeat-x;
-  background-size: 30px 30px;
-  animation: float 3s ease-in-out infinite;
+
+/* Gentle movement of warmth */
+@keyframes slowGlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
+
+/* Optional subtle accent underline */
 header::after {
-  content: '';
-  position: absolute;
-  right: 25%;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 120px;
-  height: 30px;
-  background: url('images/food.png') repeat-x;
-  background-size: 30px 30px;
-  animation: float 3s ease-in-out infinite reverse;
+  content: "";
+  display: block;
+  width: 70px;
+  height: 3px;
+  background-color: rgba(253, 250, 246, 0.6);
+  margin: 12px auto 0;
+  border-radius: 2px;
 }
-@keyframes float {
-  0%, 100% { transform: translateY(-50%); }
-  50% { transform: translateY(-60%); }
-}
+
+
     #map {
       flex-grow: 1;
       width: 100%;
@@ -86,21 +85,48 @@ header::after {
     .timeline-container input {
       width: 100%;
     }
-    .modal-title {
-  position: relative;
-  padding-left: 60px;
+   
+.leaflet-tile {
+    filter: sepia(30%) saturate(80%) brightness(95%);
+  }
+
+  /*Modal*/
+  .modal-content {
+  background: linear-gradient(135deg, #8b2e1a, #b94527, #d66b3c);
+  color: #fdfaf6;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(139, 46, 26, 0.5);
+  animation: modalGlow 8s ease-in-out infinite alternate;
 }
-.modal-title::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 50px;
-  height: 25px;
-  background: url('images/food.png') no-repeat center;
-  background-size: contain;
+@keyframes modalGlow {
+  0% { box-shadow: 0 0 12px rgba(139, 46, 26, 0.4); }
+  100% { box-shadow: 0 0 28px rgba(214, 107, 60, 0.6); }
 }
+.modal-title {
+  font-family: "Playfair Display", "Georgia", serif;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #fffaf0;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+.modal-body {
+  font-family: "Merriweather", "Georgia", serif;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 20px;
+  color: #fffaf0;
+  line-height: 1.6;
+}
+  /* Controls styling */
+  .leaflet-control-zoom a {
+    background: #b94527 !important;
+    color: #fdfaf6 !important;
+    border: none !important;
+  }
+  .leaflet-control-zoom a:hover {
+    background: #8b2e1a !important;
+  }
   </style>
 
    <!-- Leaflet -->
@@ -111,7 +137,7 @@ header::after {
 </head>
 
 <body>
-  <header>Mapping Chili Peppers' Journey to the World</header>
+  <header>Mapping Chili Peppers: A Global Journey</header>
 
   <!-- Modal Popup -->
   <div class="modal fade" id="overlay" tabindex="-1" aria-hidden="true">
@@ -141,6 +167,8 @@ header::after {
     <input type="range" id="yearSlider" min="1492" max="1900" value="1492" step="1">
   </div>
 
+   <audio id="pepperSound" src="audio/onclick.mp3" preload="auto"></audio>
+
   <!-- Bootstrap JS-->
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -148,10 +176,11 @@ header::after {
     // Initialize map centered on Brazil
     var map = L.map('map').setView([-14.2350, -51.9253], 3);
 
-    // Light muted map style (CartoDB Positron)
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-    }).addTo(map);
+     // Use a warm-toned tile provider
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: "© OpenStreetMap contributors",
+  }).addTo(map);
 
     // Datasets 
     const dataset1 = [
@@ -356,16 +385,27 @@ header::after {
         }
       }
     ];
-    
-    // Create markers from your dataset (keep structure!)
-  const pepperMarkers = dataset1.map(feature => {
-    const [lon, lat] = feature.geometry.coordinates;
-    const marker = L.marker([lat, lon], { icon: L.icon(feature.properties.icon) });
-    marker.bindPopup(`<b>${feature.properties.title}</b><br>${feature.properties.description}`);
-    marker.feature = feature; // store original feature
-    return marker;
+
+    // Audio for Pepper Icons
+const pepperSound = document.getElementById("pepperSound");
+
+// Create markers from dataset with sound
+const pepperMarkers = dataset1.map(feature => {
+  const [lon, lat] = feature.geometry.coordinates;
+  const marker = L.marker([lat, lon], { icon: L.icon(feature.properties.icon) });
+
+  marker.bindPopup(`<b>${feature.properties.title}</b><br>${feature.properties.description}`);
+
+  // Play sound when pepper icon is clicked
+  marker.on("click", () => {
+    pepperSound.currentTime = 0;
+    pepperSound.play().catch(err => console.log("Audio play error:", err));
   });
 
+  marker.feature = feature;
+  return marker;
+});
+    
  //Timeline slider
  const yearSlider= document.getElementById("yearSlider");
  const selectedYear= document.getElementById("selectedYear");
@@ -388,7 +428,12 @@ header::after {
  //Show initial state 
  yearSlider.dispatchEvent(new Event('input'));
 
-//Add lines if time 
+// Show modal on page load
+document.addEventListener("DOMContentLoaded", function () {
+  const modalElement = document.getElementById("overlay");
+  const modal = new bootstrap.Modal(modalElement);
+  modal.show();
+});
 
 </script>
 
