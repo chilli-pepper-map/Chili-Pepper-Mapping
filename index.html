@@ -434,13 +434,39 @@ document.addEventListener("DOMContentLoaded", function () {
   const modal = new bootstrap.Modal(modalElement);
   modal.show();
 });
-
 </script>
-
+<!-- Sources & Credits Modal -->
+<div class="modal fade" id="sourcesModal" tabindex="-1" aria-labelledby="sourcesModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="sourcesModalLabel">Sources & Credits</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Historical information about chili peppers comes from the following sources:</p>
+        <ul>
+          <li>Brian R. Dott, <em>The Chile Pepper in China: A Cultural Biography</em> (Columbia University Press, 2020)</li>
+          <li>Heather Arndt Anderson <em>Chilies: A Global History, Ch 3: Worldwide Adoption</em> (MIT Press,2016)</li>
+          <li>Music clips are from the Red Hot Chili Peppers<a href="https://redhotchilipeppers.com/"></a>, 1991</li>
+          <li>OpenStreetMap and Stadia Maps for geospatial basemaps</li>
+        </ul>
+        <p>Interactive design and timeline coding by the Chili Mapping Project team.  
+        Icons courtesy of <a href="https://www.flaticon.com/" target="_blank">Flaticon</a>.</p>
+        <p>Anderson, Dott, and the Red Hot Chili Peppers are not affilitated with this site.</p>
+        <p>Additionally, if you are interested in chili peppers, please check out <a href="https://chilepepperinstitute.ecwid.com/">Chile Pepper Institute Shop</a></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
   <footer>
     &copy; 2025 Chili Mapping Project | Data Sources:
     <a href="https://www.openstreetmap.org/" target="_blank">OpenStreetMap</a>,
     <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a>
+    <a href="#" data-bs-toggle="modal" data-bs-target="#sourcesModal">Additional Info</a>
   </footer>
 </body>
 </html>
